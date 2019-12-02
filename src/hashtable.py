@@ -1,3 +1,4 @@
+import hashlib
 # '''
 # Linked List hash table key/value pair
 # '''
@@ -51,8 +52,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
-
+        index = self._hash_mod(key) #where to store value
+        for i in range(len(self.storage)):
+            if self.storage[i] == None and i == index:
+                self.storage[i] = [ key,value ]
+            elif i == index:
+                print("something already exists here.")
 
 
     def remove(self, key):
@@ -63,8 +68,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
-
+        index = self._hash_mod(key)
+        if self.storage[index][0] == key:
+            self.storage[index] = None
+        else:
+            print('The key is not found')
+        
 
     def retrieve(self, key):
         '''
@@ -74,7 +83,11 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        if self.storage[index] != None:
+            return self.storage[index]
+        else:
+            return None
 
 
     def resize(self):
@@ -84,7 +97,10 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        self.capacity *= 2
+        for i in self.storage:
+            index = self._hash_mod(i[0])
+            self.insert(i)
 
 
 
@@ -115,3 +131,13 @@ if __name__ == "__main__":
     print(ht.retrieve("line_3"))
 
     print("")
+
+
+ht = HashTable(3)
+ht.insert('red', 'hello')
+ht.insert('blue', 'goodbye')
+ht.insert('hey', 'heyhey')
+ht.insert('what', 'whathwat')
+ht.remove('blue')
+print(ht.storage)
+# print(ht)
