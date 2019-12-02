@@ -47,17 +47,15 @@ class HashTable:
     def insert(self, key, value):
         '''
         Store the value with the given key.
-
         Hash collisions should be handled with Linked List Chaining.
-
         Fill this in.
         '''
+
         index = self._hash_mod(key) #where to store value
-        for i in range(len(self.storage)):
-            if self.storage[i] == None and i == index:
-                self.storage[i] = [ key,value ]
-            elif i == index:
-                print("something already exists here.")
+        if self.storage[index] == None:
+            self.storage[index] = [ key, value ]
+        elif self.storage[index] != None:
+            print('Something already exists here.')
 
 
     def remove(self, key):
