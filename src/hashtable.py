@@ -84,11 +84,11 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
-        if self.storage[index] != None:
-            return self.storage[index]
-        else:
-            return None
-
+        if index < len(self.storage):
+            if self.storage[index] != None:
+                return self.storage[index]
+        
+        return None
 
     def resize(self):
         '''
@@ -97,11 +97,14 @@ class HashTable:
 
         Fill this in.
         '''
+        tempStorage = []
         self.capacity *= 2
         for i in self.storage:
-            index = self._hash_mod(i[0])
-            self.insert(i)
+            tempStorage.append(i)
 
+        self.storage = [None] * self.capacity
+        for i in tempStorage:
+            self.insert(i[0], i[1])
 
 
 if __name__ == "__main__":
@@ -133,11 +136,11 @@ if __name__ == "__main__":
     print("")
 
 
-ht = HashTable(3)
-ht.insert('red', 'hello')
-ht.insert('blue', 'goodbye')
-ht.insert('hey', 'heyhey')
-ht.insert('what', 'whathwat')
-ht.remove('blue')
-print(ht.storage)
+# ht = HashTable(3)
+# ht.insert('red', 'hello')
+# ht.insert('blue', 'goodbye')
+# ht.insert('hey', 'heyhey')
+# ht.insert('what', 'whathwat')
+# ht.remove('blue')
+# print(ht.storage)
 # print(ht)

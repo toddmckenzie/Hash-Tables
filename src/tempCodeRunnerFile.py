@@ -1,2 +1,1 @@
-
-    def remove(self, key):
+None
