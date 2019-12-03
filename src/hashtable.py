@@ -1,4 +1,4 @@
-import hashlib
+
 # '''
 # Linked List hash table key/value pair
 # '''
@@ -9,78 +9,55 @@ class LinkedPair:
         self.next = None
 
 class HashTable:
-    '''
-    A hash table that with `capacity` buckets
-    that accepts string keys
-    '''
+
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
-
+        self.count = 0
 
     def _hash(self, key):
-        '''
-        Hash an arbitrary key and return an integer.
 
-        You may replace the Python hash with DJB2 as a stretch goal.
-        '''
         return hash(key)
 
 
     def _hash_djb2(self, key):
-        '''
-        Hash an arbitrary key using DJB2 hash
-
-        OPTIONAL STRETCH: Research and implement DJB2
-        '''
+  
         pass
 
 
     def _hash_mod(self, key):
-        '''
-        Take an arbitrary key and return a valid integer index
-        within the storage capacity of the hash table.
-        '''
-
+  
         return self._hash(key) % self.capacity
 
 
     def insert(self, key, value):
-        '''
-        Store the value with the given key.
-        Hash collisions should be handled with Linked List Chaining.
-        Fill this in.
-        '''
-
         index = self._hash_mod(key) #where to store value
         if self.storage[index] == None:
-            self.storage[index] = [ key, value ]
+            self.storage[index] = LinkedPair(key, value)
+            self.count += 1
         elif self.storage[index] != None:
-            print('Something already belongs here.')
-            # if self.storage[index] != LinkedPair():
-            #     LinkedPair(key, value)
-            # else:
-            #     lp = LinkedPair()
-            #     while lp:
-            #         if not lp.next:
-            #             lp.next = LinkedPair(key, value)
-            #             return
-            #         lp = lp.next
+            lp = self.storage[index]
+            while lp:
+                if not lp.next:
+                    lp.next = LinkedPair(key, value)
+                    return
+                lp = lp.next
 
     def remove(self, key):
-        '''
-        Remove the value stored with the given key.
-
-        Print a warning if the key is not found.
-
-        Fill this in.
-        '''
         index = self._hash_mod(key)
-        if self.storage[index][0] == key:
-            self.storage[index] = None
-        else:
-            print('The key is not found')
-        
+        if self.storage[index].key == key:
+            if not self.storage[index].next:
+                self.storage[index] = None
+            else:
+                self.storage[index] = self.storage[index].next
+        elif self.storage[index] != None:
+            lp = self.storage[index]
+            while lp:
+                if lp.next.key == key:
+                    if lp.next.next:
+                        lp.next = lp.next.next
+                lp = lp.next
+            return lp.key
 
     def retrieve(self, key):
         '''
@@ -90,12 +67,12 @@ class HashTable:
 
         Fill this in.
         '''
-        index = self._hash_mod(key)
-        if index < len(self.storage):
-            if self.storage[index] != None and self.storage[index][0] == key:
-                return self.storage[index]
+        # index = self._hash_mod(key)
+        # if index < len(self.storage):
+        #     if self.storage[index] != None and self.storage[index][0] == key:
+        #         return self.storage[index]
         
-        return None
+        # return None
 
     def resize(self):
         '''
@@ -107,7 +84,6 @@ class HashTable:
         tempStorage = []
         self.capacity *= 2
         for i in self.storage:
-            print(i)
             tempStorage.append(i)
 
         self.storage = [None] * self.capacity
@@ -148,11 +124,22 @@ ht = HashTable(3)
 ht.insert('red', 'hello')
 ht.insert('blue', 'hi')
 ht.insert('green', 'yo')
+ht.insert('red1', 'hello')
+ht.insert('blue1', 'hi')
+ht.insert('green1', 'yo')
+ht.insert('red1', 'hello')
+ht.insert('blue2', 'hi')
+ht.insert('green2', 'yo')
+ht.insert('red2', 'hello')
+ht.insert('blue3', 'hi')
+ht.insert('green3', 'yo')
 print('*************')
 print('*************')
-print(ht.retrieve('green'))
+print(ht.remove('red'))
 print('*************')
 print('*************')
+# ht.remove('green')
+# print(ht.storage)
 # print(ht.storage)
 # ht.insert('blue', 'goodbye')
 # ht.insert('hey', 'heyhey')
