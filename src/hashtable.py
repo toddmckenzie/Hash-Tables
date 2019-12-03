@@ -35,29 +35,35 @@ class HashTable:
         if self.storage[index] == None:
             self.storage[index] = LinkedPair(key, value)
             self.count += 1
+            return self.storage[index].value
         elif self.storage[index] != None:
             lp = self.storage[index]
             while lp:
+                if lp.key == key:
+                    lp.value = value
+                    return lp.value
                 if not lp.next:
                     lp.next = LinkedPair(key, value)
-                    return
+                    return lp.next.value
                 lp = lp.next
 
     def remove(self, key):
         index = self._hash_mod(key)
-        if self.storage[index].key == key:
-            if not self.storage[index].next:
-                self.storage[index] = None
-            else:
-                self.storage[index] = self.storage[index].next
-        elif self.storage[index] != None:
-            lp = self.storage[index]
-            while lp:
-                if lp.next.key == key:
-                    if lp.next.next:
-                        lp.next = lp.next.next
-                lp = lp.next
-            return lp.key
+        if self.storage[index] != None:
+            if self.storage[index].key == key:
+                if self.storage[index].next == None:
+                    self.storage[index] = None
+                else:
+                    self.storage[index] = self.storage[index].next
+            elif self.storage[index] != None:
+                lp = self.storage[index]
+                while lp:
+                    if lp.next:
+                        if lp.next.key == key:
+                            if lp.next.next:
+                                lp.next = lp.next.next
+                    lp = lp.next
+
 
     def retrieve(self, key):
         '''
@@ -67,12 +73,18 @@ class HashTable:
 
         Fill this in.
         '''
-        # index = self._hash_mod(key)
-        # if index < len(self.storage):
-        #     if self.storage[index] != None and self.storage[index][0] == key:
-        #         return self.storage[index]
-        
-        # return None
+        index = self._hash_mod(key)
+        if self.storage[index]:
+            if self.storage[index].key == key:
+                return self.storage[index].value
+            else:
+                lp = self.storage[index]
+                while lp:
+                    if lp.key == key:
+                        return lp.value
+                    lp = lp.next
+
+        return None
 
     def resize(self):
         '''
@@ -81,14 +93,14 @@ class HashTable:
 
         Fill this in.
         '''
-        tempStorage = []
+        tempStorage = self.storage
         self.capacity *= 2
-        for i in self.storage:
-            tempStorage.append(i)
+        # for i in self.storage:
+        #     tempStorage.append(i)
 
         self.storage = [None] * self.capacity
         for i in tempStorage:
-            self.insert(i[0], i[1])
+            self.insert(tempStorage[i])
 
 
 # if __name__ == "__main__":
@@ -120,24 +132,26 @@ class HashTable:
 #     print("")
 
 
-ht = HashTable(3)
-ht.insert('red', 'hello')
-ht.insert('blue', 'hi')
-ht.insert('green', 'yo')
-ht.insert('red1', 'hello')
-ht.insert('blue1', 'hi')
-ht.insert('green1', 'yo')
-ht.insert('red1', 'hello')
-ht.insert('blue2', 'hi')
-ht.insert('green2', 'yo')
-ht.insert('red2', 'hello')
-ht.insert('blue3', 'hi')
-ht.insert('green3', 'yo')
-print('*************')
-print('*************')
-print(ht.remove('red'))
-print('*************')
-print('*************')
+# ht = HashTable(3)
+# ht.insert('red', 'hello')
+# ht.insert('blue', 'hi')
+# ht.insert('green', 'yo')
+# ht.insert('red1', 'hello')
+# ht.insert('blue1', 'hi')
+# ht.insert('green1', 'yo')
+# ht.insert('red1', 'hello')
+# ht.insert('blue2', 'hi')
+# ht.insert('green2', 'yo')
+# ht.insert('red2', 'hellosadfad')
+# ht.insert('blue3', 'hi')
+# ht.insert('green3', 'yo')
+# print('*************')
+# print('*************')
+# print(ht.retrieve('red2'))
+# print(ht.remove('red2'))
+# print(ht.retrieve('red2'))
+# print('*************')
+# print('*************')
 # ht.remove('green')
 # print(ht.storage)
 # print(ht.storage)
