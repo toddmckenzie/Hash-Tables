@@ -31,7 +31,7 @@ class HashTable:
 
 
     def insert(self, key, value):
-        index = self._hash_mod(key) #where to store value
+        index = self._hash_mod(key) 
         if self.storage[index] == None:
             self.storage[index] = LinkedPair(key, value)
             self.count += 1
@@ -44,6 +44,7 @@ class HashTable:
                     return lp.value
                 if not lp.next:
                     lp.next = LinkedPair(key, value)
+                    self.count += 1
                     return lp.next.value
                 lp = lp.next
 
@@ -53,8 +54,10 @@ class HashTable:
             if self.storage[index].key == key:
                 if self.storage[index].next == None:
                     self.storage[index] = None
+                    self.count -= 1
                 else:
                     self.storage[index] = self.storage[index].next
+                    self.count -= 1
             elif self.storage[index] != None:
                 lp = self.storage[index]
                 while lp:
@@ -62,17 +65,12 @@ class HashTable:
                         if lp.next.key == key:
                             if lp.next.next:
                                 lp.next = lp.next.next
+                            else:
+                                lp.next = None
                     lp = lp.next
 
 
     def retrieve(self, key):
-        '''
-        Retrieve the value stored with the given key.
-
-        Returns None if the key is not found.
-
-        Fill this in.
-        '''
         index = self._hash_mod(key)
         if self.storage[index]:
             if self.storage[index].key == key:
@@ -87,20 +85,21 @@ class HashTable:
         return None
 
     def resize(self):
-        '''
-        Doubles the capacity of the hash table and
-        rehash all key/value pairs.
-
-        Fill this in.
-        '''
         tempStorage = self.storage
         self.capacity *= 2
-        # for i in self.storage:
-        #     tempStorage.append(i)
-
+        self.count = 0
         self.storage = [None] * self.capacity
         for i in tempStorage:
-            self.insert(tempStorage[i])
+            if i != None:
+                self.insert(i.key, i.value)
+                if i.next != None:
+                    item = i
+                    while item:
+                        item = item.next
+                        if item != None:
+                            self.insert(item.key, item.value)
+
+                  
 
 
 # if __name__ == "__main__":
@@ -143,8 +142,24 @@ class HashTable:
 # ht.insert('blue2', 'hi')
 # ht.insert('green2', 'yo')
 # ht.insert('red2', 'hellosadfad')
-# ht.insert('blue3', 'hi')
-# ht.insert('green3', 'yo')
+# ht.insert('blasdasdffue3', 'hi')
+# ht.insert('greadadfsfen3', 'yo')
+# ht.insert('blasdadffued2', 'hi')
+# ht.insert('greafadsfden2d', 'yo')
+# ht.insert('redaadsfdfd2', 'hellosadfad')
+# ht.insert('bluadadsffe2d', 'hi')
+# ht.insert('greaddadfen2d', 'yo')
+# ht.insert('reddadsfaf2d', 'hellosadfad')
+# ht.insert('bludadfafe2d', 'hi')
+# ht.insert('greenafds2', 'yo')
+# ht.insert('redadsfs2', 'hellosadfad')
+# ht.insert('greaadsfdsfen3', 'yo')
+# ht.insert('blasadsfdfued2', 'hi')
+# ht.insert('greaadffden2d', 'yo')
+# ht.insert('redaadfdfd2', 'hellosadfad')
+# ht.insert('bluaaddfdfe2d', 'hi')
+
+# print(ht.capacity)
 # print('*************')
 # print('*************')
 # print(ht.retrieve('red2'))
